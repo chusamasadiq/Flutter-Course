@@ -37,4 +37,14 @@ class Cart {
       'foodTotalPrice': foodTotalPrice,
     };
   }
+
+  Map<String, dynamic> toJson() => {
+        'foodId': foodID,
+        'foodName': foodName,
+        'foodPrice': foodPrice,
+        'quantity': quantity,
+        'foodImage': foodImage,
+        'deliveryCharges': deliveryCharges,
+        'foodTotalPrice': foodTotalPrice,
+      };
 }

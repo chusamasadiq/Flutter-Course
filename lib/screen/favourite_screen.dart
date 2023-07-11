@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercourse/screen/food_description.dart';
+import 'package:provider/provider.dart';
 
+import '../models/cart.dart';
+import '../provider/cart_provider.dart';
+import '../resources/db_helper.dart';
 import '../utils/utils.dart';
 
 class FavouriteScreen extends StatefulWidget {
@@ -12,8 +16,11 @@ class FavouriteScreen extends StatefulWidget {
 }
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
+  DBHelper? dbHelper = DBHelper();
+
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context); // reference
     return Scaffold(
       appBar: AppBar(
         title: const Text('Favourite'),
@@ -63,7 +70,6 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               deliveryTime: foodList[index]['deliveryTime'],
                               foodRatings: foodList[index]['ratings'],
                               foodDescription: foodList[index]['foodDescription'],
-
                             ),
                           ),
                         ),
@@ -94,7 +100,28 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                   'Price: ${foodList[index]['foodPrice'].toString()}/-'),
                               const SizedBox(height: 5),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  dbHelper!.insert(
+                                    Cart(
+                                      foodID: foodList[index]['foodID'].toString(),
+                                      foodName: foodList[index]['foodName'].toString(),
+                                      foodPrice: foodList[index]['foodPrice'],
+                                      quantity: foodList[index]['quantity'],
+                                      foodImage: foodList[index]['foodImage'].toString(),
+                                      deliveryCharges: foodList[index]['deliveryCharges'],
+                                      foodTotalPrice: foodList[index]['foodPrice'],
+                                    ),
+                                  )
+                                      .then((value) {
+                                    Utils.toastMessage("Product is Added to Cart");
+                                    cart.addTotalPrice(double.parse(foodList[index]['foodPrice'].toString(),
+                                      ),
+                                    );
+                                    cart.addCounter();
+                                  }).onError((error, stackTrace) {
+                                    Utils.toastMessage(error.toString());
+                                  });
+                                },
                                 child: const Text('Add to Cart'),
                               )
                             ],

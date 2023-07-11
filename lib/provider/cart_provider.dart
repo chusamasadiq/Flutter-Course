@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttercourse/models/cart.dart';
-import 'package:fluttercourse/resources/db_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CartProvider with ChangeNotifier {
-  DBHelper db = DBHelper();
+import '../models/cart.dart';
+import '../resources/db_helper.dart';
 
+class CartProvider with ChangeNotifier {
+  DBHelper db = DBHelper(); // DBHelper() is a class
   int _counter = 0;
 
   int get counter => _counter;
@@ -16,7 +16,7 @@ class CartProvider with ChangeNotifier {
 
   late Future<List<Cart>> _cart;
 
-  Future<List<Cart>> get cart => _cart;
+  Future<List<Cart>> get cart => _cart; // => means to indicate
 
   Future<List<Cart>> getData() async {
     _cart = db.getCartList();
@@ -24,63 +24,68 @@ class CartProvider with ChangeNotifier {
     return _cart;
   }
 
-  void _setPrefItem() async {
+  void _setPrefItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('cart_item', _counter);
     prefs.setDouble('total_price', _totalPrice);
     notifyListeners();
   }
 
-  void _getPrefItem() async {
+  void _getPrefItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // giving initial value by ?? 0 for null safety
     _counter = prefs.getInt('cart_item') ?? 0;
-    _totalPrice = prefs.getDouble('total_price') ?? 0;
+
+    // giving initial value by ?? 0.0 for null safety
+    _totalPrice = prefs.getDouble('total_price') ?? 0.0;
     notifyListeners();
   }
 
   void addTotalPrice(double productPrice) {
-    _totalPrice = totalPrice + productPrice;
-    _setPrefItem();
+    _totalPrice = _totalPrice + productPrice;
+    _setPrefItems();
     notifyListeners();
   }
 
   void removeTotalPrice(double productPrice) {
-    _totalPrice = totalPrice - productPrice;
-    _setPrefItem();
+    _totalPrice = _totalPrice - productPrice;
+    _setPrefItems();
     notifyListeners();
   }
 
-  void resetTotalPrice(double productPrice) {
+  void resetTotalPrice() {
     _totalPrice = 0.0;
-    _setPrefItem();
+    _setPrefItems();
     notifyListeners();
   }
 
   void resetCounter() {
     _counter = 0;
-    _setPrefItem();
+    _setPrefItems();
     notifyListeners();
   }
 
   double getTotalPrice() {
-    _getPrefItem();
+    _getPrefItems();
     return _totalPrice;
   }
 
   void addCounter() {
+    // initial value of counter was 0, will be incremented to 1, and will be stored to sharedPreferences
     _counter++;
-    _setPrefItem();
+    _setPrefItems();
     notifyListeners();
   }
 
   void removeCounter() {
     _counter--;
-    _setPrefItem();
+    _setPrefItems();
     notifyListeners();
   }
 
   int getCounter() {
-    _getPrefItem();
+    _getPrefItems();
     return _counter;
   }
 }
