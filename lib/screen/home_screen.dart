@@ -36,17 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
   // Get Location from Latitude and Longitude
   Future<void> getLocationFromLatLng(latitude, longitude) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
-    Placemark place = placemarks[0];
-    setState(
-      () {
+    List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placeMarks[0];
+    if (mounted) {
+      setState(() {
         userLocation = '${place.locality}, ${place.country}';
-      },
-    );
+      });
+    }
   }
 
   @override
@@ -54,6 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     getUserLocation();
+  }
+
+  @override
+  void dispose() {
+    lat = null;
+    lan = null;
+    userLocation = null;
+    super.dispose();
   }
 
   @override

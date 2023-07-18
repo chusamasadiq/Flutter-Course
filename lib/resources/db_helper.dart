@@ -22,12 +22,12 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE food (foodID VARCHAR UNIQUE, foodName TEXT, foodPrice INTEGER, quantity INTEGER, foodImage TEXT, deliveryCharges INTEGER, foodTotalPrice INTEGER');
+        'CREATE TABLE food (foodID VARCHAR UNIQUE, foodName TEXT, foodPrice INTEGER, quantity INTEGER, foodImage TEXT, deliveryCharges INTEGER, foodTotalPrice INTEGER)');
   }
 
   Future<Cart> insert(Cart cart) async {
     var dbClient = await db;
-    await dbClient!.insert('cart', cart.toMap());
+    await dbClient!.insert('food', cart.toMap());
     return cart;
   }
 

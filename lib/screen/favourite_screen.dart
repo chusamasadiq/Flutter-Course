@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercourse/screen/food_description.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sqflite/sqflite.dart';
 import '../models/cart.dart';
 import '../provider/cart_provider.dart';
 import '../resources/db_helper.dart';
@@ -66,10 +66,12 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               foodName: foodList[index]['foodName'],
                               foodImage: foodList[index]['foodImage'],
                               foodPrice: foodList[index]['foodPrice'],
-                              deliveryCharges: foodList[index]['deliveryCharges'],
+                              deliveryCharges: foodList[index]
+                                  ['deliveryCharges'],
                               deliveryTime: foodList[index]['deliveryTime'],
                               foodRatings: foodList[index]['ratings'],
-                              foodDescription: foodList[index]['foodDescription'],
+                              foodDescription: foodList[index]
+                                  ['foodDescription'],
                             ),
                           ),
                         ),
@@ -111,19 +113,26 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       deliveryCharges: foodList[index]['deliveryCharges'],
                                       foodTotalPrice: foodList[index]['foodPrice'],
                                     ),
-                                  )
-                                      .then((value) {
+                                  ).then((value) {
                                     Utils.toastMessage("Product is Added to Cart");
-                                    cart.addTotalPrice(double.parse(foodList[index]['foodPrice'].toString(),
-                                      ),
-                                    );
+                                    cart.addTotalPrice(double.parse(foodList[index]['foodPrice'].toString()));
                                     cart.addCounter();
-                                  }).onError((error, stackTrace) {
-                                    Utils.toastMessage(error.toString());
+                                  }).catchError((error) {
+                                    if (error is DatabaseException) {
+                                      if (error.toString().contains('UNIQUE constraint failed')) {
+                                        Utils.toastMessage("Product is already in the Cart");
+                                      } else {
+                                        Utils.toastMessage("Error occurred while adding the product");
+                                      }
+                                    } else {
+                                      Utils.toastMessage("Error occurred while adding the product");
+                                    }
                                   });
                                 },
                                 child: const Text('Add to Cart'),
                               )
+
+
                             ],
                           ),
                         ),
