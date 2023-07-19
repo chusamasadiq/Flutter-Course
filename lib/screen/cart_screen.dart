@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:provider/provider.dart';
-
 import '../components/button.dart';
 import '../models/cart.dart';
 import '../provider/cart_provider.dart';
