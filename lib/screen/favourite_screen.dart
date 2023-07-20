@@ -30,10 +30,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   // Fetch food data using StreamBuilder and pagination
   void fetchFoodData() async {
     try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('food')
-          .limit(10) // Adjust the limit based on your pagination needs
-          .get();
+      final snapshot = await FirebaseFirestore.instance.collection('food').limit(10).get();
 
       setState(() {
         foodList = snapshot.docs;
@@ -169,43 +166,30 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                     const SizedBox(height: 5),
                                     ElevatedButton(
                                       onPressed: () {
-                                        dbHelper!
-                                            .insert(
-                                          Cart(
-                                            foodID:
-                                                foodItem['foodID'].toString(),
+                                        dbHelper!.insert(
+                                          Cart(foodID: foodItem['foodID'].toString(),
                                             foodName:
-                                                foodItem['foodName'].toString(),
+                                            foodItem['foodName'].toString(),
                                             foodPrice: foodItem['foodPrice'],
                                             quantity: foodItem['quantity'],
-                                            foodImage: foodItem['foodImage']
-                                                .toString(),
-                                            deliveryCharges:
-                                                foodItem['deliveryCharges'],
-                                            foodTotalPrice:
-                                                foodItem['foodPrice'],
+                                            foodImage: foodItem['foodImage'].toString(),
+                                            deliveryCharges: foodItem['deliveryCharges'],
+                                            foodTotalPrice: foodItem['foodPrice'],
                                           ),
                                         )
                                             .then((value) {
-                                          Utils.toastMessage(
-                                              "Product is Added to Cart");
-                                          cart.addTotalPrice(double.parse(
-                                              foodItem['foodPrice']
-                                                  .toString()));
+                                          Utils.toastMessage("Product is Added to Cart");
+                                          cart.addTotalPrice(double.parse(foodItem['foodPrice'].toString()));
                                           cart.addCounter();
                                         }).catchError((error) {
                                           if (error is DatabaseException) {
-                                            if (error.toString().contains(
-                                                'UNIQUE constraint failed')) {
-                                              Utils.toastMessage(
-                                                  "Product is already in the Cart");
+                                            if (error.toString().contains('UNIQUE constraint failed')) {
+                                              Utils.toastMessage("Product is already in the Cart");
                                             } else {
-                                              Utils.toastMessage(
-                                                  "Error occurred while adding the product");
+                                              Utils.toastMessage("Error occurred while adding the product");
                                             }
                                           } else {
-                                            Utils.toastMessage(
-                                                "Error occurred while adding the product");
+                                            Utils.toastMessage("Error occurred while adding the product");
                                           }
                                         });
                                       },
