@@ -271,7 +271,8 @@ class _CartScreenState extends State<CartScreen> {
               },
             ),
             Consumer<CartProvider>(builder: (context, value, child) {
-              return Visibility(visible: value.getTotalPrice().toStringAsFixed(2) == '0.00' // 0.00
+              return Visibility(
+                visible: value.getTotalPrice().toStringAsFixed(2) == '0.00' // 0.00
                         ? false
                         : true,
                 child: Column(
@@ -311,7 +312,6 @@ class _CartScreenState extends State<CartScreen> {
                               foodImage: foodLists[i].foodImage,
                               deliveryCharges: foodLists[i].deliveryCharges,
                               foodTotalPrice: foodLists[i].foodTotalPrice,
-                              selectedDates: selectedDates.toString(),
                             );
                             dbHelper?.deleteAll();
                             cart.resetTotalPrice();

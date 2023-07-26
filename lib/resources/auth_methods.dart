@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttercourse/models/cart.dart' as model;
 import '../utils/utils.dart';
 
-
 class AuthMethods {
   // Firebase Auth Instance
   final _auth = FirebaseAuth.instance;
@@ -92,15 +91,7 @@ class AuthMethods {
     return response;
   }
 
-  Future<String> orderNow({
-    required String foodID,
-    required String foodName,
-    required int foodPrice,
-    required int quantity,
-    required String foodImage,
-    required int deliveryCharges,
-    required int foodTotalPrice,
-    String? selectedDates,
+  Future<String> orderNow({required String foodID, required String foodName, required int foodPrice, required int quantity, required String foodImage, required int deliveryCharges, required int foodTotalPrice,
   }) async {
     String response;
 
@@ -116,12 +107,7 @@ class AuthMethods {
         foodTotalPrice: foodTotalPrice,
       );
       User currentUser = _auth.currentUser!;
-      await _firestore
-          .collection('users')
-          .doc(currentUser.uid)
-          .collection('orders')
-          .doc()
-          .set(cart.toJson());
+      await _firestore.collection('users').doc(currentUser.uid).collection('orders').doc().set(cart.toJson());
       response = 'success';
     } on FirebaseAuthException catch (ex) {
       response = ex.message.toString();
@@ -159,7 +145,6 @@ class AuthMethods {
       }
     }
   }
-
 
   // Logout Function
   void logout() async {
