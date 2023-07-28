@@ -116,15 +116,10 @@ class AuthMethods {
   }
 
   // Send Order Details
-  void sendOrderDetails({
-    required String foodName,
-    required int foodPrice,
-    required int quantity,
-    required int deliveryCharges,
-    required int foodTotalPrice,
+  void sendOrderDetails({required String foodName, required int foodPrice, required int quantity, required int deliveryCharges, required int foodTotalPrice,
   }) async {
     String username = 'usamasadiqdev@gmail.com';
-    String password = 'yvqsqjrfrjhfofts';
+    String password = 'bpzjbfrttivgrbwu';
     final smtpServer = gmail(username, password);
     final message = Message()
       ..from = Address(username, 'FastDelivery')
